@@ -1,26 +1,65 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import ResizableVideo from './resizable-video/ResizableVideo';
 
-function App() {
-  return (
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {stream: null, error: null}
+  }
+  
+  componentDidMount() {
+    const {mediaDevices} = window.navigator;
+    if (!mediaDevices) {
+      this.setState({error: 'Cannot access webcam. Are you running out of localhost or without https?'})
+    } else {
+      mediaDevices.getUserMedia(this.videoConstraints())
+        .then(s => {
+          this.setState({stream: s});
+        })
+        .catch(e => this.setState({error: e}));
+    }
+  }
+
+  componentWillUnmount() {
+    this.state.stream.getVideoTracks().forEach(vt => vt.stop());
+  }
+  
+  render = () => {
+    const videoErrorOrLoadingContent = this.state.stream ?
+     <ResizableVideo srcObject={this.state.stream} containerClassName="App-video"/> : <span className="App-feedbackMessage">
+       {this.error ? this.error : 'loading...'}
+      </span>
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ul className="App-side_menu">
+        <li>Menu Item 1</li>
+        <li>Menu Item 2</li>
+        <li>Menu Item 3</li>
+        <li>Menu Item 4</li>
+        <li>Menu Item 5</li>
+      </ul>
+      
+      {videoErrorOrLoadingContent}
     </div>
-  );
-}
+    );
+  }
 
-export default App;
+  // Min 480p - Max 1080p
+  videoConstraints = () => ({
+    audio: false,
+    video: {
+      width: {
+        min: 640,
+        ideal: 1280,
+        max: 1920
+      },
+      height: {
+        min: 480,
+        ideal: 720,
+        max: 1080
+      },
+      facingMode: 'environment'
+    }
+  });  
+}

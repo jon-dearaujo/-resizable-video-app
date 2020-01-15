@@ -1,0 +1,7 @@
+.ResizableVideo-container {
+  display: flex;
+}
+
+.ResizableVideo-container > video {
+  flex: 1;
+}
