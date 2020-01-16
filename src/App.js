@@ -23,7 +23,7 @@ const videoConstraints = () => ({
 export default function App(_) {
   const [stream, setStream] = useState(null);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     const {mediaDevices} = window.navigator;
     if (!mediaDevices) {
@@ -37,11 +37,12 @@ export default function App(_) {
     }
 
     return () => {
+
       if (stream) {
         stream.getVideoTracks().forEach(vt => vt.stop());
       }
     }
-  });
+  }, []);
   
   const textContent = error ? error : 'Loading...';
   const videoErrorOrLoadingContent = stream ?

@@ -40,10 +40,8 @@ export default class ResizableVideo extends React.Component {
     const containerClientWidth = this.containerRef.current.clientWidth;
 
     if (videoClientWidth <= this.videoRef.current.videoWidth) {
-      console.log('updated to ', `${containerClientWidth}px`);
       this.videoRef.current.style.width = `${containerClientWidth}px`;
     } else {
-      console.log('cleaned');
       this.videoRef.current.style.width = '';
     }
   }
