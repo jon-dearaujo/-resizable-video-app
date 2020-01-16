@@ -52,7 +52,7 @@ export default class ResizableVideo extends React.Component {
 
 ResizableVideo.propTypes = {
   src: PropTypes.string,
-  srcObject: PropTypes.instanceOf(MediaStream),
+  srcObject: PropTypes.instanceOf(window.MediaStream),
   containerClassName: PropTypes.string,
   customProp: (props, propName, componentName) => {
     const error = new Error(`Must provide one and only one of 'src' or 'srcObject'`);

@@ -11,25 +11,27 @@ export default class App extends React.Component {
   componentDidMount() {
     const {mediaDevices} = window.navigator;
     if (!mediaDevices) {
-      this.setState({error: 'Cannot access webcam. Are you running out of localhost or without https?'})
+      this.setState({error: 'Cannot access webcam. Are you running out of localhost or without https?'});
     } else {
       mediaDevices.getUserMedia(this.videoConstraints())
         .then(s => {
           this.setState({stream: s});
         })
-        .catch(e => this.setState({error: e}));
+        .catch(e => this.setState({error: e.message}));
     }
   }
 
   componentWillUnmount() {
-    this.state.stream.getVideoTracks().forEach(vt => vt.stop());
+    if (this.state.stream) {
+      this.state.stream.getVideoTracks().forEach(vt => vt.stop());
+    }
   }
   
   render = () => {
+    const textContent = this.state.error ? this.state.error : 'Loading...';
     const videoErrorOrLoadingContent = this.state.stream ?
-     <ResizableVideo srcObject={this.state.stream} containerClassName="App-video"/> : <span className="App-feedbackMessage">
-       {this.error ? this.error : 'loading...'}
-      </span>
+     <ResizableVideo srcObject={this.state.stream} containerClassName="App-video"/>
+     : <span className="App-feedbackMessage">{textContent}</span>
     return (
     <div className="App">
       <ul className="App-side_menu">

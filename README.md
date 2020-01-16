@@ -6,6 +6,5 @@ ensuring a natural almost perfect resize persisting the aspect ratio.
 App component uses a Webcam (getUserMedia) to provide the video source, but any url could be given to
 ResizableComponent.
 
-The POC was suspended while validating the behavior on a mobile device. No automated tests included.
-
+The POC was suspended while validating the behavior on a mobile device.
 
